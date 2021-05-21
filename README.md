@@ -25,35 +25,31 @@ The action has the following outputs:
 
 The following example is a simple workflow that uses the action.
 ```
-name: Version Bump
+name: Get last commit info
 on:
   push:
     branch: master
 
 jobs:
-
-  get-bump:
-    name: Get version bump
+  push_to_registry:
+    name: example workflow
     runs-on: ubuntu-latest
-    outputs:
-      bump: ${{ steps.get-version-bump.outputs.bump }}
     steps:
+      - 
+        name: Checkout cartographer_ros
+        uses: actions/checkout@v2
+        with:
+          path: 'some_path' 
       -
-        name: Get version bump
-        id: get-version-bump
-        uses: husarion-ci/action-get-version-bump@v0.1.0
+        name: last-commit
+        id: last-commit
+        uses: husarion-ci/action-get-repo-state@v0.1.2
+        with:
+          repo-path: 'some_path' 
+      -
+        name: print
+        run:  |
+          echo ${{ steps.last-commit.outputs.last-commit }}  
 
-  bump-version:
-    name: Bump version
-    runs-on: ubuntu-latest
-    needs: get-bump
-    if: ${{ needs.get-bump.outputs.bump != 'none' }}
-    steps:
-      -
-        name: Bump version
-        run: echo "Bumping ${{ needs.get-bump.outputs.bump }} version"
 ```
 
-In the example, this action is used in a separate `get-bump` job,
-and the subsequent `bump-version` job is only run if the `get-bump`
-detects a version bump command.
