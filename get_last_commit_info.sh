@@ -1,7 +1,11 @@
 #!/bin/bash
- 
-if git status; then
-    echo "::set-output name=last-commit::$( echo `git describe --tags` `git rev-parse HEAD`)"
+if git fetch --unshallow; then
+    git fetch --tags
+    ref="`git describe --tags` `git rev-parse HEAD`"
+    echo "ref=$ref" >> $GITHUB_ENV
 else
-    echo "::set-output name=last-commit::$( echo failed to get: git describe --tags git rev-parse HEAD)"
+    ref="failed to get: git describe --tags git rev-parse HEAD)"
+    echo "ref=$ref" >> $GITHUB_ENV
 fi
+
+echo "writing $ref to: $GITHUB_ENV"

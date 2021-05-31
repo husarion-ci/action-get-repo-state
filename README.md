@@ -43,7 +43,7 @@ jobs:
       -
         name: last-commit
         id: last-commit
-        uses: husarion-ci/action-get-repo-state@v0.2
+        uses: husarion-ci/action-get-repo-state@v0.2.0
         with:
           repo-path: 'some_path' 
       -
