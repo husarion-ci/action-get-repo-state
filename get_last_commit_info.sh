@@ -1,7 +1,7 @@
 #!/bin/bash
  
-if git log -1 ; then
-    echo "::set-output name=last-commit::$( echo $(git log -1))"
+if git status; then
+    echo "::set-output name=last-commit::$( echo `git describe --tags` `git rev-parse HEAD`)"
 else
-    echo "::set-output name=last-commit::$( echo failed to get git log)"
+    echo "::set-output name=last-commit::$( echo failed to get: git describe --tags git rev-parse HEAD)"
 fi
